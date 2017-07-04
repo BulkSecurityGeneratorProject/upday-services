@@ -1,0 +1,21 @@
+{
+    "updayApp": {
+        "keyword" : {
+            "home": {
+                "title": "Keywords",
+                "createLabel": "Créer un nouveau Keyword",
+                "createOrEditLabel": "Créer ou éditer un Keyword"
+            },
+            "created": "Un nouveau Keyword a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Keyword avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Keyword avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Keyword {{ id }} ?"
+            },
+            "detail": {
+                "title": "Keyword"
+            },
+            "description": "Description"
+        }
+    }
+}

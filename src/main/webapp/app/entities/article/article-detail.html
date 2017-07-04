@@ -1,0 +1,47 @@
+
+<div>
+    <h2><span data-translate="updayApp.article.detail.title">Article</span> {{vm.article.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="updayApp.article.header">Header</span></dt>
+        <dd>
+            <span>{{vm.article.header}}</span>
+        </dd>
+        <dt><span data-translate="updayApp.article.description">Description</span></dt>
+        <dd>
+            <span>{{vm.article.description}}</span>
+        </dd>
+        <dt><span data-translate="updayApp.article.text">Text</span></dt>
+        <dd>
+            <span>{{vm.article.text}}</span>
+        </dd>
+        <dt><span data-translate="updayApp.article.publicationDate">Publication Date</span></dt>
+        <dd>
+            <span>{{vm.article.publicationDate | date:'medium'}}</span>
+        </dd>
+        <dt><span data-translate="updayApp.article.author">Author</span></dt>
+        <dd>
+            <span ng-repeat="author in vm.article.authors">
+                <a ui-sref="author-detail({id: author.id})">{{author.id}}</a>{{$last ? '' : ', '}}
+            </span>
+        </dd>
+        <dt><span data-translate="updayApp.article.keyword">Keyword</span></dt>
+        <dd>
+            <span ng-repeat="keyword in vm.article.keywords">
+                <a ui-sref="keyword-detail({id: keyword.id})">{{keyword.description}}</a>{{$last ? '' : ', '}}
+            </span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="article-detail.edit({id:vm.article.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>
