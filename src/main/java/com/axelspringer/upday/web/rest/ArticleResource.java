@@ -18,6 +18,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,15 +90,24 @@ public class ArticleResource {
     }
 
     /**
-     * GET  /articles : get all the articles.
-     *
+     * GET  /articles : get articles.
+     * @param startDate lower bound to filter by date (optional)
+     * @param endDate upper bound to filter by date (optional)
      * @return the ResponseEntity with status 200 (OK) and the list of articles in body
      */
     @GetMapping("/articles")
     @Timed
-    public List<ArticleDTO> getAllArticles() {
+    public List<ArticleDTO> getArticles(@RequestParam(required = false) ZonedDateTime startDate,
+                                        @RequestParam(required = false) ZonedDateTime endDate) {
         log.debug("REST request to get all Articles");
-        List<Article> articles = articleRepository.findAllWithEagerRelationships();
+        List<Article> articles;
+        if (startDate == null && endDate == null) {
+            articles = articleRepository.findAllWithEagerRelationships();
+        } else {
+            final ZonedDateTime validStartDate = startDate == null ? ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault()) : startDate;
+            final ZonedDateTime validEndDate = endDate == null ? ZonedDateTime.now() : endDate;
+            articles = articleRepository.findByPublicationDateBetween(validStartDate, validEndDate);
+        }
         return articleMapper.toDto(articles);
     }
 
@@ -127,25 +138,6 @@ public class ArticleResource {
         log.debug("REST request to delete Article : {}", id);
         articleRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * GET  /articles:
-     *
-     * @param startDate
-     * @param endDate
-     * @return the ResponseEntity with status 200 (OK) and with body the articleDTO, or with status 404 (Not Found)
-     */
-    @GetMapping("/articles/date")
-    @Timed
-    public ResponseEntity<List<ArticleDTO>> getArticleByDate(@RequestParam Instant startDate, @RequestParam Instant endDate) {
-        // TODO: ugly url mapping
-        // we could make a nicer url like a POST method "/articles/search" or "/articles/filter"
-        // with an object containing filtering parameters...
-        log.debug("REST request to get Articles by date");
-        List<Article> articles = articleRepository.findByPublicationDateBetween(startDate, endDate);
-        List<ArticleDTO> articlesDTO = articleMapper.toDto(articles);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(articlesDTO));
     }
 
 }

@@ -63,5 +63,9 @@
   },
   "scripts": {
     "test": "gulp test"
+  },
+  "dependencies": {
+    "node-uuid": "^1.4.8",
+    "progress": "^2.0.0"
   }
 }

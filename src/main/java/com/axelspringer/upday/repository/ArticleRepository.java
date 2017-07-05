@@ -1,16 +1,13 @@
 package com.axelspringer.upday.repository;
 
 import com.axelspringer.upday.domain.Article;
-import com.axelspringer.upday.domain.Author;
-import com.axelspringer.upday.domain.Keyword;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Spring Data JPA repository for the Article entity.
@@ -31,6 +28,7 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
     @Query("SELECT article FROM Article article LEFT JOIN FETCH article.keywords keyword WHERE keyword.description =:description")
     List<Article> findByKeyword(@Param("description") String description);
 
-    List<Article> findByPublicationDateBetween(Instant startDate, Instant endDate);
+    @Query("select distinct article from Article article left join fetch article.authors left join fetch article.keywords where article.publicationDate between :startDate and :endDate")
+    List<Article> findByPublicationDateBetween(@Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
 }
