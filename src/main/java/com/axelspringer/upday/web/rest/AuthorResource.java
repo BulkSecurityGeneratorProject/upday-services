@@ -142,7 +142,7 @@ public class AuthorResource {
      * GET  /authors/:id : get articles by the "id" author.
      *
      * @param id the id of the author
-     * @return the ResponseEntity with status 200 (OK) and with body the List<Article>, or with status 404 (Not Found)
+     * @return the ResponseEntity with status 200 (OK) and with body the List<ArticleDTO>, or with status 404 (Not Found)
      */
     @GetMapping("/authors/{id}/articles")
     @Timed

@@ -3,11 +3,14 @@ package com.axelspringer.upday.web.rest;
 import com.axelspringer.upday.UpdayApp;
 
 import com.axelspringer.upday.domain.Article;
+import com.axelspringer.upday.domain.Author;
+import com.axelspringer.upday.domain.Keyword;
 import com.axelspringer.upday.repository.ArticleRepository;
 import com.axelspringer.upday.service.dto.ArticleDTO;
 import com.axelspringer.upday.service.mapper.ArticleMapper;
 import com.axelspringer.upday.web.rest.errors.ExceptionTranslator;
 
+import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +31,7 @@ import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Set;
 
 import static com.axelspringer.upday.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,6 +59,9 @@ public class ArticleResourceIntTest {
 
     private static final ZonedDateTime DEFAULT_PUBLICATION_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_PUBLICATION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+
+    private static final Set<Author> DEFAULT_AUTHORS = ImmutableSet.of(new Author().firstName("John").lastName("Doe"));
+    private static final Set<Keyword> DEFAULT_KEYWORDS = ImmutableSet.of(new Keyword().description("Top news"));
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -152,7 +159,7 @@ public class ArticleResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllArticles() throws Exception {
+    public void getArticles() throws Exception {
         // Initialize the database
         articleRepository.saveAndFlush(article);
 
